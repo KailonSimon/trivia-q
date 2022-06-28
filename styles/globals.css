@@ -1,9 +1,25 @@
+:root {
+  --main-bg-color: #264653;
+  --navbar-height: 64px;
+  --footer-height: 96px;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
 }
 
 a {
@@ -15,7 +31,99 @@ a {
   box-sizing: border-box;
 }
 
-.question-container {
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+#navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 997;
+  height: var(--navbar-height);
+  width: 100%;
+  background-color: var(--main-bg-color);
+  color: white;
+}
+
+#footer {
+  display: flex;
+  justify-content: center;
+  height: var(--footer-height);
+  width: 100%;
+  background-color: var(--main-bg-color);
+  color: white;
+}
+
+#main {
+  position: relative;
+  min-height: calc(100vh - var(--footer-height));
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: calc(16px + var(--navbar-height)) 16px 16px;
+}
+
+#overlay {
+  z-index: 998;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  height: 100vh;
+  width: 100vw;
+}
+
+.modal {
+  z-index: 999;
+  background-color: white;
+  border-radius: 16px;
+  height: 50%;
+  width: 75%;
+  display: flex;
+  filter: drop-shadow(0 0 2px white);
+}
+
+#scoreboard {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  padding: 16px 0;
+  margin-bottom: 5vh;
+}
+
+.difficulty-badge {
+  border-radius: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 32px;
+  color: white;
+  font-weight: 700;
+}
+
+.difficulty-badge.easy {
+  background: green;
+}
+
+.difficulty-badge.medium {
+  background: orange;
+}
+
+.difficulty-badge.hard {
+  background: red;
+}
+
+#question-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,11 +133,11 @@ a {
   text-align: center;
 }
 
-.question {
+#question {
   margin-bottom: 32px;
 }
 
-.answer-button-container {
+#answer-button-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -39,7 +147,7 @@ a {
 button {
   padding: 15px 25px;
   border: unset;
-  border-radius: 8px;
+  border-radius: 32px;
   color: #212121;
   z-index: 1;
   background: #e8e8e8;
@@ -57,7 +165,7 @@ button::before {
   left: 0;
   height: 100%;
   width: 0;
-  border-radius: 8px;
+  border-radius: 32px;
   background-color: #212121;
   z-index: -1;
   transition: all 250ms;
@@ -91,7 +199,8 @@ button.incorrect::before {
 }
 
 #next-button {
-  margin-top: 36px;
+  position: fixed;
+  bottom: 15%;
   display: flex;
   align-items: center;
   gap: 16px;
