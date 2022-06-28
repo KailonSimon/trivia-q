@@ -14,3 +14,85 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.question {
+  margin-bottom: 32px;
+}
+
+.answer-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+button {
+  padding: 15px 25px;
+  border: unset;
+  border-radius: 8px;
+  color: #212121;
+  z-index: 1;
+  background: #e8e8e8;
+  position: relative;
+  font-weight: 1000;
+  font-size: 17px;
+  transition: all 250ms;
+  overflow: hidden;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 8px;
+  background-color: #212121;
+  z-index: -1;
+  transition: all 250ms;
+}
+
+button:hover {
+  color: #e8e8e8;
+  cursor: pointer;
+}
+
+button:hover::before {
+  width: 100%;
+}
+
+button.correct,
+button.correct::before {
+  background-color: green;
+  color: white;
+  transition: none;
+}
+
+button.incorrect,
+button.incorrect::before {
+  background-color: red;
+  color: white;
+  transition: none;
+}
+
+.answer-button {
+  width: 100%;
+}
+
+#next-button {
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
