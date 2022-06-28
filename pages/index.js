@@ -5,14 +5,19 @@ import { useQuery } from "react-query";
 import { shuffle } from "lodash";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "tabler-icons-react";
-import Modal from "../components/Modal";
 const he = require("he");
+import useSound from "use-sound";
+import correct from "../public/sounds/correct.mp3";
+import incorrect from "../public/sounds/incorrect.mp3";
 
 export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [buttonTranslate, setButtonTranslate] = useState(-50);
+  const [playCorrect] = useSound("sounds/correct.mp3");
+  const [playIncorrect] = useSound("sounds/incorrect.mp3");
+
   const { isLoading, error, data, refetch } = useQuery(
     "questions",
     () =>
@@ -38,8 +43,10 @@ export default function Home() {
   const selectAnswer = (answer) => {
     setSelectedAnswer(answer);
     if (answer === data.results[0].correct_answer) {
+      playCorrect();
       setScore(score + 1);
     } else {
+      playIncorrect();
       return;
     }
   };
@@ -70,6 +77,7 @@ export default function Home() {
                 <p>{data.results[0].difficulty.toUpperCase()}</p>
               </span>
             </div>
+
             <div id="question-container">
               <h2 id="question">{he.decode(data.results[0].question)}</h2>
               <div id="answer-button-container">
@@ -115,7 +123,8 @@ export default function Home() {
                 opacity: selectedAnswer ? 1 : 0,
                 x: selectedAnswer ? 0 : buttonTranslate,
               }}
-              transition={{ ease: "anticipate" }}
+              transition={{ delay: 0.75 }}
+              disabled={!selectedAnswer}
             >
               <span>Next Question</span>
               <ArrowRight size={24} strokeWidth={3} />
