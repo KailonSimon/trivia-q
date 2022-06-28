@@ -5,7 +5,6 @@ import { useQuery } from "react-query";
 import { shuffle } from "lodash";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "tabler-icons-react";
-import { duration } from "@material-ui/core";
 const he = require("he");
 
 export default function Home() {
