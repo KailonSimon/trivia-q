@@ -9,6 +9,7 @@ const he = require("he");
 import useSound from "use-sound";
 import correct from "../public/sounds/correct.mp3";
 import incorrect from "../public/sounds/incorrect.mp3";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -40,6 +41,14 @@ export default function Home() {
     }
   }, [data]);
 
+  useEffect(() => {
+    localStorage.setItem("score", JSON.stringify(score));
+  }, [score]);
+
+  useEffect(() => {
+    localStorage.getItem("score");
+  }, []);
+
   const selectAnswer = (answer) => {
     setSelectedAnswer(answer);
     if (answer === data.results[0].correct_answer) {
@@ -64,7 +73,7 @@ export default function Home() {
       </Head>
       <>
         {isLoading ? (
-          <h1>Loading...</h1>
+          <ThreeDots color="black" />
         ) : error ? (
           <h1>An error has occurred: {error.message}</h1>
         ) : (
@@ -123,7 +132,6 @@ export default function Home() {
                 opacity: selectedAnswer ? 1 : 0,
                 x: selectedAnswer ? 0 : buttonTranslate,
               }}
-              transition={{ delay: 0.75 }}
               disabled={!selectedAnswer}
             >
               <span>Next Question</span>
