@@ -81,7 +81,7 @@ export default function Game({ numberOfQuestions }) {
             id="next-button"
             onClick={
               currentQuestion + 1 === numberOfQuestions
-                ? router.push("/")
+                ? () => router.push("/")
                 : nextQuestion
             }
             initial={false}
