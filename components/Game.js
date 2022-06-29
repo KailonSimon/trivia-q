@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "react-query";
 import { ArrowRight, Check } from "tabler-icons-react";
 import useSound from "use-sound";
@@ -53,9 +53,10 @@ export default function Game({ numberOfQuestions }) {
       ) : (
         <>
           <div id="scoreboard">
-            <div>
+            <div style={{ fontWeight: 700 }}>
               <p>
-                Score: {score ? score : "-"} / {currentQuestion + 1}
+                Score: {score ? score : "-"} /{" "}
+                {selectedAnswer ? currentQuestion + 1 : currentQuestion}
               </p>
               <p>
                 Question: {currentQuestion + 1}/{numberOfQuestions}
@@ -71,38 +72,44 @@ export default function Game({ numberOfQuestions }) {
             />
           </div>
 
-          <Question
-            data={data.results[currentQuestion]}
-            selectAnswer={selectAnswer}
-            selectedAnswer={selectedAnswer}
-          />
+          <AnimatePresence>
+            <Question
+              data={data.results[currentQuestion]}
+              selectAnswer={selectAnswer}
+              selectedAnswer={selectedAnswer}
+            />
+          </AnimatePresence>
 
-          <motion.button
-            id="next-button"
-            onClick={
-              currentQuestion + 1 === numberOfQuestions
-                ? () => router.push("/")
-                : nextQuestion
-            }
-            initial={false}
-            animate={{
-              opacity: selectedAnswer ? 1 : 0,
-              x: selectedAnswer ? 0 : buttonTranslate,
-            }}
-            disabled={!selectedAnswer}
-          >
-            {currentQuestion + 1 === numberOfQuestions ? (
-              <>
-                <span>Finish</span>
-                <Check size={24} strokeWidth={3} />
-              </>
-            ) : (
-              <>
-                <span>Next Question</span>
-                <ArrowRight size={24} strokeWidth={3} />
-              </>
-            )}
-          </motion.button>
+          <div id="next-button-container">
+            <AnimatePresence>
+              {selectedAnswer && (
+                <motion.button
+                  id="next-button"
+                  onClick={
+                    currentQuestion + 1 === numberOfQuestions
+                      ? () => router.push("/")
+                      : nextQuestion
+                  }
+                  initial={{ x: -100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 100, opacity: 0 }}
+                  disabled={!selectedAnswer}
+                >
+                  {currentQuestion + 1 === numberOfQuestions ? (
+                    <>
+                      <span>Finish</span>
+                      <Check size={24} strokeWidth={3} />
+                    </>
+                  ) : (
+                    <>
+                      <span>Next Question</span>
+                      <ArrowRight size={24} strokeWidth={3} />
+                    </>
+                  )}
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
         </>
       )}
     </>

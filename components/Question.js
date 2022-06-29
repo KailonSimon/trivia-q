@@ -16,7 +16,23 @@ function Question({ data, selectAnswer, selectedAnswer }) {
     }
   }, [data]);
   return (
-    <div id="question-container">
+    <motion.div
+      id="question-container"
+      key={data.question}
+      initial={{ x: 25, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -25, opacity: 0 }}
+    >
+      <p
+        style={{
+          marginBottom: 8,
+          fontWeight: 500,
+          fontSize: "1rem",
+          borderBottom: "2px solid black",
+        }}
+      >
+        {data.category}
+      </p>
       <h2 id="question">{he.decode(data.question)}</h2>
       <div id="answer-button-container">
         {answers.map((answer, i) => (
@@ -50,7 +66,7 @@ function Question({ data, selectAnswer, selectedAnswer }) {
           </motion.button>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

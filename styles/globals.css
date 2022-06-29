@@ -99,7 +99,7 @@ a {
   width: 100%;
   max-width: 600px;
   padding: 16px 0;
-  margin-bottom: 5vh;
+  margin-bottom: 1vh;
 }
 
 .difficulty-badge {
@@ -149,6 +149,8 @@ a {
 
 #question {
   margin-bottom: 32px;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 #answer-button-container {
@@ -210,6 +212,13 @@ button.incorrect::before {
 
 .answer-button {
   width: 100%;
+}
+
+#next-button-container {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 #next-button {
