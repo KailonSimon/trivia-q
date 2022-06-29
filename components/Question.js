@@ -1,0 +1,57 @@
+import { motion } from "framer-motion";
+import { shuffle } from "lodash";
+import { useEffect, useState } from "react";
+const he = require("he");
+
+function Question({ data, selectAnswer, selectedAnswer }) {
+  const [answers, setAnswers] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      if (data.type === "multiple") {
+        setAnswers(shuffle([...data.incorrect_answers, data.correct_answer]));
+      } else {
+        setAnswers(["True", "False"]);
+      }
+    }
+  }, [data]);
+  return (
+    <div id="question-container">
+      <h2 id="question">{he.decode(data.question)}</h2>
+      <div id="answer-button-container">
+        {answers.map((answer, i) => (
+          <motion.button
+            className={`answer-button ${
+              selectedAnswer
+                ? answer === data.correct_answer
+                  ? "correct"
+                  : "incorrect"
+                : null
+            }`}
+            key={i}
+            onClick={() => selectAnswer(answer)}
+            disabled={selectedAnswer}
+            initial={{ opacity: 1 }}
+            animate={{
+              opacity: selectedAnswer
+                ? answer === data.correct_answer || answer === selectedAnswer
+                  ? 1
+                  : 0
+                : 1,
+              y: selectedAnswer
+                ? answer === data.correct_answer || answer === selectedAnswer
+                  ? 0
+                  : 25
+                : 0,
+            }}
+            transition={{ duration: 0.5 }}
+          >
+            {he.decode(answer)}
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Question;
