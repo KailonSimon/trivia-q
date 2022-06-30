@@ -7,6 +7,7 @@ import useSound from "use-sound";
 import { ThreeDots } from "react-loader-spinner";
 import ProgressBar from "./ProgressBar";
 import Question from "./Question";
+import { addStat } from "../utils/firebase";
 
 export default function Game({ numberOfQuestions }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -28,12 +29,16 @@ export default function Game({ numberOfQuestions }) {
 
   const selectAnswer = (answer) => {
     setSelectedAnswer(answer);
+    data.results[currentQuestion].selected_answer = answer;
     if (answer === data.results[currentQuestion].correct_answer) {
       playCorrect();
       setScore(score + 1);
+      data.results[currentQuestion].correct = true;
+      addStat(data.results[currentQuestion]);
     } else {
       playIncorrect();
-      return;
+      data.results[currentQuestion].correct = false;
+      addStat(data.results[currentQuestion]);
     }
   };
 
