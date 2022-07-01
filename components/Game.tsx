@@ -50,14 +50,22 @@ export default function Game({ numberOfQuestions }) {
 
   const selectAnswer = (answer: string) => {
     dispatch({ type: "setAnswer", payload: answer });
-    data.results[currentQuestion].selected_answer = answer;
+
+    try {
+      const body = { question: data.results[currentQuestion], answer };
+      fetch("/api/question", {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
     if (answer === data.results[currentQuestion].correct_answer) {
-      playCorrect();
       dispatch({ type: "incrementScore" });
-      data.results[currentQuestion].correct = true;
     } else {
-      playIncorrect();
-      data.results[currentQuestion].correct = false;
+      return;
     }
   };
 
