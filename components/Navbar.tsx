@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu2, X } from "tabler-icons-react";
 
 export default function Navbar() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const handleMenuClick = () => {
     setSidebarOpen(!sidebarOpen);

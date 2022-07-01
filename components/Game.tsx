@@ -7,13 +7,11 @@ import useSound from "use-sound";
 import { ThreeDots } from "react-loader-spinner";
 import ProgressBar from "./ProgressBar";
 import Question from "./Question";
-import { addStat } from "../utils/firebase";
 
 export default function Game({ numberOfQuestions }) {
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [buttonTranslate, setButtonTranslate] = useState(-50);
+  const [selectedAnswer, setSelectedAnswer] = useState<string>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const [playCorrect] = useSound("sounds/correct.mp3");
   const [playIncorrect] = useSound("sounds/incorrect.mp3");
   const router = useRouter();
@@ -27,18 +25,16 @@ export default function Game({ numberOfQuestions }) {
     { refetchOnWindowFocus: false }
   );
 
-  const selectAnswer = (answer) => {
+  const selectAnswer = (answer: string) => {
     setSelectedAnswer(answer);
     data.results[currentQuestion].selected_answer = answer;
     if (answer === data.results[currentQuestion].correct_answer) {
       playCorrect();
       setScore(score + 1);
       data.results[currentQuestion].correct = true;
-      addStat(data.results[currentQuestion]);
     } else {
       playIncorrect();
       data.results[currentQuestion].correct = false;
-      addStat(data.results[currentQuestion]);
     }
   };
 
@@ -54,7 +50,7 @@ export default function Game({ numberOfQuestions }) {
       {isLoading ? (
         <ThreeDots color="black" />
       ) : error ? (
-        <h1>An error has occurred: {error.message}</h1>
+        <h1>An error has occurred.</h1>
       ) : (
         <>
           <div id="scoreboard">

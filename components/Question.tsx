@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { shuffle } from "lodash";
 import { useEffect, useState } from "react";
-const he = require("he");
+import he from "he";
 
 function Question({ data, selectAnswer, selectedAnswer }) {
   const [answers, setAnswers] = useState([]);

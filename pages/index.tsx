@@ -1,8 +1,5 @@
 import Head from "next/head";
-import Game from "../components/Game";
-import Select from "react-select";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 export default function Home() {
   const router = useRouter();
