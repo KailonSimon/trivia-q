@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "react-query";
@@ -8,29 +8,52 @@ import { ThreeDots } from "react-loader-spinner";
 import ProgressBar from "./ProgressBar";
 import Question from "./Question";
 
+const initialState = { score: 0, selectedAnswer: null, currentQuestion: 0 };
+
+type ACTIONTYPE =
+  | { type: "incrementScore" }
+  | { type: "setAnswer"; payload: string }
+  | { type: "nextQuestion" };
+
+function reducer(state: typeof initialState, action: ACTIONTYPE) {
+  switch (action.type) {
+    case "incrementScore":
+      return { ...state, score: state.score + 1 };
+    case "setAnswer":
+      return { ...state, selectedAnswer: action.payload };
+    case "nextQuestion":
+      return { ...state, currentQuestion: state.currentQuestion + 1 };
+    default:
+      throw new Error();
+  }
+}
+
 export default function Game({ numberOfQuestions }) {
-  const [selectedAnswer, setSelectedAnswer] = useState<string>(null);
-  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
-  const [score, setScore] = useState<number>(0);
+  const [gameState, dispatch] = useReducer(reducer, initialState);
+  const { score, selectedAnswer, currentQuestion } = gameState;
   const [playCorrect] = useSound("sounds/correct.mp3");
   const [playIncorrect] = useSound("sounds/incorrect.mp3");
   const router = useRouter();
 
-  const { isLoading, error, data, refetch } = useQuery(
+  const { isLoading, error, data, remove } = useQuery(
     "questions",
     () =>
       fetch(`https://opentdb.com/api.php?amount=${numberOfQuestions}`).then(
         (res) => res.json()
       ),
-    { refetchOnWindowFocus: false }
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      staleTime: Infinity,
+    }
   );
 
   const selectAnswer = (answer: string) => {
-    setSelectedAnswer(answer);
+    dispatch({ type: "setAnswer", payload: answer });
     data.results[currentQuestion].selected_answer = answer;
     if (answer === data.results[currentQuestion].correct_answer) {
       playCorrect();
-      setScore(score + 1);
+      dispatch({ type: "incrementScore" });
       data.results[currentQuestion].correct = true;
     } else {
       playIncorrect();
@@ -40,9 +63,14 @@ export default function Game({ numberOfQuestions }) {
 
   const nextQuestion = () => {
     if (currentQuestion < numberOfQuestions - 1) {
-      setSelectedAnswer(null);
-      setCurrentQuestion(currentQuestion + 1);
+      dispatch({ type: "setAnswer", payload: null });
+      dispatch({ type: "nextQuestion" });
     }
+  };
+
+  const endQuiz = () => {
+    remove();
+    router.push("/");
   };
 
   return (
@@ -88,7 +116,7 @@ export default function Game({ numberOfQuestions }) {
                   id="next-button"
                   onClick={
                     currentQuestion + 1 === numberOfQuestions
-                      ? () => router.push("/")
+                      ? endQuiz
                       : nextQuestion
                   }
                   initial={{ x: -100, opacity: 0 }}

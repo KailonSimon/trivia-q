@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import he from "he";
 
 function Question({ data, selectAnswer, selectedAnswer }) {
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState<string[]>([]);
 
   useEffect(() => {
     if (data) {
