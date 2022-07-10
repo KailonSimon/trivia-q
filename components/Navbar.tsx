@@ -47,7 +47,7 @@ export default function Navbar() {
                       <a>Home</a>
                     </Link>
                   </motion.li>
-                  <motion.li
+                  {/*<motion.li
                     className="nav-link"
                     variants={navLinks}
                     initial="visible"
@@ -56,14 +56,20 @@ export default function Navbar() {
                     <Link href="/stats">
                       <a>Stats</a>
                     </Link>
-                  </motion.li>
+        </motion.li>*/}
                   <motion.li
                     className="nav-link"
                     variants={navLinks}
                     initial="visible"
                     whileHover="hover"
                   >
-                    <a href="https://www.kailon.dev">Contact</a>
+                    <a
+                      href="https://www.kailon.dev"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Contact
+                    </a>
                   </motion.li>
                 </ul>
               </nav>

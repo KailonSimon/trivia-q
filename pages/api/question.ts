@@ -8,26 +8,24 @@ export default async function handle(
   res: NextApiResponse
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
-  if (session) {
-    const uid = session.user.id;
-    const { question, answer } = req.body;
-    try {
-      const result = await prisma.question.create({
-        data: {
-          question: question.question,
-          type: question.type,
-          difficulty: question.difficulty,
-          category: question.category,
-          incorrectAnswers: question.incorrect_answers,
-          correctAnswer: question.correct_answer,
-          selectedAnswer: answer,
-          userId: uid,
-        },
-      });
-      res.status(200).json({ result });
-    } catch (err) {
-      console.log(err);
-      res.status(403).json({ err: "Error occurred" });
-    }
-  } else res.status(401);
+  const uid = session?.user.id;
+  const { question, answer } = req.body;
+  try {
+    const result = await prisma.question.create({
+      data: {
+        question: question.question,
+        type: question.type,
+        difficulty: question.difficulty,
+        category: question.category,
+        incorrectAnswers: question.incorrect_answers,
+        correctAnswer: question.correct_answer,
+        selectedAnswer: answer,
+        ...(session && { userId: uid }),
+      },
+    });
+    res.status(200).json({ result });
+  } catch (err) {
+    console.log(err);
+    res.status(403).json({ err: "Error occurred" });
+  }
 }
