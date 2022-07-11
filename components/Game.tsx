@@ -7,6 +7,7 @@ import useSound from "use-sound";
 import { ThreeDots } from "react-loader-spinner";
 import ProgressBar from "./ProgressBar";
 import Question from "./Question";
+import { useSession } from "next-auth/react";
 
 const initialState = { score: 0, selectedAnswer: null, currentQuestion: 0 };
 
@@ -34,6 +35,7 @@ export default function Game({ numberOfQuestions }) {
   const [playCorrect] = useSound("sounds/correct.mp3");
   const [playIncorrect] = useSound("sounds/incorrect.mp3");
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const { isLoading, error, data, remove } = useQuery(
     "questions",
@@ -52,8 +54,12 @@ export default function Game({ numberOfQuestions }) {
     dispatch({ type: "setAnswer", payload: answer });
 
     try {
-      const body = { question: data.results[currentQuestion], answer };
-      fetch("/api/question", {
+      const body = {
+        question: data.results[currentQuestion],
+        answer,
+        ...(session && { uid: session.user.id }),
+      };
+      fetch("/api/answers", {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(body),
