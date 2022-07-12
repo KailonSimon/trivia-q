@@ -47,6 +47,16 @@ export default function Navbar() {
                       <a>Home</a>
                     </Link>
                   </motion.li>
+                  <motion.li
+                    className="nav-link"
+                    variants={navLinks}
+                    initial="visible"
+                    whileHover="hover"
+                  >
+                    <Link href="/stats">
+                      <a>Stats</a>
+                    </Link>
+                  </motion.li>
                   {/*<motion.li
                     className="nav-link"
                     variants={navLinks}

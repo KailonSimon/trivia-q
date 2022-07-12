@@ -19,16 +19,16 @@ function Question({ data, selectAnswer, selectedAnswer }) {
     <motion.div
       id="question-container"
       key={data.question}
-      initial={{ x: 25, opacity: 0 }}
+      initial={{ x: 50, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -25, opacity: 0 }}
+      exit={{ x: -50, opacity: 0 }}
     >
       <p
+        className="question-category"
         style={{
           marginBottom: 8,
           fontWeight: 500,
           fontSize: "1rem",
-          borderBottom: "2px solid black",
         }}
       >
         {data.category}

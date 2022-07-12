@@ -1,26 +1,144 @@
 import { unstable_getServerSession } from "next-auth";
-import { useEffect, useState } from "react";
-import { PieChart } from "react-minimal-pie-chart";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/prisma";
+import { Question } from "@prisma/client";
+import {
+  Pie,
+  PieChart,
+  Legend,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
-export default function Stats({ answers }) {
-  const stats = useState([]);
+const colors = ["#008000", "#FF0000", "#f2f2f2", "#cdbe78"];
+
+const getCorrectAnswers = (answers: Question[]) => {
+  return answers.filter(
+    (answer: Question) => answer.selectedAnswer === answer.correctAnswer
+  );
+};
+
+const getIncorrectAnswers = (answers: Question[]) => {
+  return answers.filter(
+    (answer: Question) => answer.selectedAnswer !== answer.correctAnswer
+  );
+};
+
+export default function Stats({ data }) {
+  const { data: session, status } = useSession();
+
+  let userData: Question[];
+
+  if (status === "authenticated") {
+    userData = data.filter(
+      (answer: Question) => answer.userId === session.user.id
+    );
+  }
+
+  useEffect(() => {
+    if (userData) {
+      console.log(userData);
+    }
+  }, [userData]);
 
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        maxWidth: 600,
-        display: "flex",
-        alignItems: "center",
-        flex: 1,
-        flexDirection: "column",
-        fontWeight: 700,
-      }}
-    ></div>
+    <div className="stats-container">
+      <h1>Stats</h1>
+
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexFlow: "row wrap",
+          justifyContent: "center",
+        }}
+      >
+        {userData && (
+          <div className="stats-chart-wrapper">
+            <h2>You</h2>
+            {userData.length ? (
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie
+                    data={[
+                      {
+                        name: "Correct",
+                        value: getCorrectAnswers(userData).length,
+                      },
+                      {
+                        name: "Incorrect",
+                        value: getIncorrectAnswers(userData).length,
+                      },
+                    ]}
+                    dataKey="value"
+                    nameKey="name"
+                    fill="red"
+                  >
+                    {data.map((item, index) => (
+                      <Cell key={`cell-${index}`} fill={colors[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: 8,
+                      backgroundColor: "#191919",
+                      border: "1px solid #cdbe78",
+                    }}
+                    itemStyle={{ color: "#f2f2f2" }}
+                    formatter={(value, name, props) =>
+                      `${((value / data.length) * 100).toFixed(2)}%`
+                    }
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p style={{ marginTop: 4 }}>No user data.</p>
+            )}
+          </div>
+        )}
+
+        <div className="stats-chart-wrapper">
+          <h2>Average</h2>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={[
+                  { name: "Correct", value: getCorrectAnswers(data).length },
+                  {
+                    name: "Incorrect",
+                    value: getIncorrectAnswers(data).length,
+                  },
+                ]}
+                dataKey="value"
+                nameKey="name"
+                fill="red"
+              >
+                {data.map((item, index) => (
+                  <Cell key={`cell-${index}`} fill={colors[index]} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  borderRadius: 8,
+                  backgroundColor: "#191919",
+                  border: "1px solid #cdbe78",
+                }}
+                itemStyle={{ color: "#f2f2f2" }}
+                formatter={(value, name, props) =>
+                  `${((value / data.length) * 100).toFixed(2)}%`
+                }
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -31,7 +149,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     authOptions
   );
 
-  const data = await prisma.question.findMany({});
+  const data = await prisma.question.findMany({
+    select: {
+      id: true,
+      question: true,
+      type: true,
+      difficulty: true,
+      category: true,
+      incorrectAnswers: true,
+      correctAnswer: true,
+      selectedAnswer: true,
+      userId: true,
+    },
+  });
 
   return {
     props: {

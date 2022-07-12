@@ -28,6 +28,7 @@ export default function Home() {
           flex: 1,
           gap: 16,
           margin: "auto 0",
+          textAlign: "center",
         }}
       >
         <Link href="/play">
