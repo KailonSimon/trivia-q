@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { Text } from "@nextui-org/react";
 
 const colors = ["#008000", "#FF0000", "#f2f2f2", "#cdbe78"];
 
@@ -59,7 +60,7 @@ export default function Stats({ data }) {
       >
         {userData && (
           <div className="stats-chart-wrapper">
-            <h2>You</h2>
+            <Text size="1.25rem">You</Text>
             {userData.length ? (
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
@@ -103,7 +104,7 @@ export default function Stats({ data }) {
         )}
 
         <div className="stats-chart-wrapper">
-          <h2>Average</h2>
+          <Text size="1.25rem">Average</Text>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie

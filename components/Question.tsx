@@ -33,7 +33,7 @@ function Question({ data, selectAnswer, selectedAnswer }) {
       >
         {data.category}
       </p>
-      <h2 id="question">{he.decode(data.question)}</h2>
+      <p id="question">{he.decode(data.question)}</p>
       <div id="answer-button-container">
         {answers.map((answer, i) => (
           <motion.button

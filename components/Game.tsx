@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "react-query";
@@ -8,6 +8,7 @@ import { ThreeDots } from "react-loader-spinner";
 import ProgressBar from "./ProgressBar";
 import Question from "./Question";
 import { useSession } from "next-auth/react";
+import { Text } from "@nextui-org/react";
 
 const initialState = { score: 0, selectedAnswer: null, currentQuestion: 0 };
 
@@ -36,6 +37,7 @@ export default function Game({ numberOfQuestions }) {
   const [playIncorrect] = useSound("sounds/incorrect.mp3");
   const router = useRouter();
   const { data: session, status } = useSession();
+  const ref = useRef(null);
 
   const { isLoading, error, data, remove } = useQuery(
     "questions",
@@ -68,6 +70,8 @@ export default function Game({ numberOfQuestions }) {
       console.error(error);
     }
 
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+
     if (answer === data.results[currentQuestion].correct_answer) {
       dispatch({ type: "incrementScore" });
     } else {
@@ -96,20 +100,22 @@ export default function Game({ numberOfQuestions }) {
       ) : (
         <>
           <div id="scoreboard">
-            <div style={{ fontWeight: 700 }}>
-              <p>
+            <div>
+              <Text weight="bold">
                 Score: {score ? score : "-"} /{" "}
                 {selectedAnswer ? currentQuestion + 1 : currentQuestion}
-              </p>
-              <p>
+              </Text>
+              <Text weight="bold">
                 Question: {currentQuestion + 1}/{numberOfQuestions}
-              </p>
+              </Text>
             </div>
-            <span
+            <div
               className={`difficulty-badge ${data.results[currentQuestion].difficulty}`}
             >
-              <p>{data.results[currentQuestion].difficulty.toUpperCase()}</p>
-            </span>
+              <Text weight="bold">
+                {data.results[currentQuestion].difficulty.toUpperCase()}
+              </Text>
+            </div>
             <ProgressBar
               value={((currentQuestion + 1) / numberOfQuestions) * 100}
             />
@@ -123,7 +129,7 @@ export default function Game({ numberOfQuestions }) {
             />
           </AnimatePresence>
 
-          <div id="next-button-container">
+          <div id="next-button-container" ref={ref}>
             <AnimatePresence>
               {selectedAnswer && (
                 <motion.button
