@@ -37,7 +37,6 @@ export default function Game({ numberOfQuestions }) {
   const [playIncorrect] = useSound("sounds/incorrect.mp3");
   const router = useRouter();
   const { data: session, status } = useSession();
-  const ref = useRef(null);
 
   const { isLoading, error, data, remove } = useQuery(
     "questions",
@@ -69,8 +68,6 @@ export default function Game({ numberOfQuestions }) {
     } catch (error) {
       console.error(error);
     }
-
-    ref.current?.scrollIntoView({ behavior: "smooth" });
 
     if (answer === data.results[currentQuestion].correct_answer) {
       dispatch({ type: "incrementScore" });
@@ -129,7 +126,7 @@ export default function Game({ numberOfQuestions }) {
             />
           </AnimatePresence>
 
-          <div id="next-button-container" ref={ref}>
+          <div id="next-button-container">
             <AnimatePresence>
               {selectedAnswer && (
                 <motion.button
