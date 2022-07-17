@@ -5,12 +5,14 @@ export interface GameState {
   score: number;
   selectedAnswer?: string;
   currentQuestion: number;
+  inGame: boolean;
 }
 
 const initialState: GameState = {
   score: 0,
   selectedAnswer: null,
   currentQuestion: 0,
+  inGame: false,
 };
 
 export const gameSlice = createSlice({
@@ -34,6 +36,15 @@ export const gameSlice = createSlice({
       state.score = 0;
       state.currentQuestion = 0;
     },
+    startGame: (state) => {
+      state.inGame = true;
+    },
+    endGame: (state) => {
+      state.inGame = false;
+      state.selectedAnswer = null;
+      state.score = 0;
+      state.currentQuestion = 0;
+    },
   },
 });
 
@@ -43,6 +54,8 @@ export const {
   resetAnswer,
   advanceQuestion,
   resetGame,
+  startGame,
+  endGame,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
