@@ -13,9 +13,27 @@ import {
 } from "recharts";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Text } from "@nextui-org/react";
+import { createStyles, Title, Text } from "@mantine/core";
 
-const colors = ["#008000", "#FF0000", "#f2f2f2", "#cdbe78"];
+const useStyles = createStyles((theme) => ({
+  container: {
+    height: "100%",
+    minHeight: "calc(100vh - 160px)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "1rem 0",
+  },
+  chartWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    width: 600,
+    maxWidth: "100%",
+  },
+}));
+
+const colors = ["#008000", "#FF0000"];
 
 const getCorrectAnswers = (answers: Question[]) => {
   return answers.filter(
@@ -30,6 +48,7 @@ const getIncorrectAnswers = (answers: Question[]) => {
 };
 
 export default function Stats({ data }) {
+  const { classes } = useStyles();
   const { data: session, status } = useSession();
 
   let userData: Question[];
@@ -47,8 +66,10 @@ export default function Stats({ data }) {
   }, [userData]);
 
   return (
-    <div className="stats-container">
-      <h1>Stats</h1>
+    <div className={classes.container}>
+      <Title order={1} mb={8}>
+        Stats
+      </Title>
 
       <div
         style={{
@@ -59,8 +80,8 @@ export default function Stats({ data }) {
         }}
       >
         {userData && (
-          <div className="stats-chart-wrapper">
-            <Text size="1.25rem">You</Text>
+          <div className={classes.chartWrapper}>
+            <Text weight={700}>You</Text>
             {userData.length ? (
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
@@ -98,13 +119,13 @@ export default function Stats({ data }) {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <p style={{ marginTop: 4 }}>No user data.</p>
+              <Text style={{ marginTop: 4 }}>No user data.</Text>
             )}
           </div>
         )}
 
-        <div className="stats-chart-wrapper">
-          <Text size="1.25rem">Average</Text>
+        <div className={classes.chartWrapper}>
+          <Text weight={700}>Average</Text>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
