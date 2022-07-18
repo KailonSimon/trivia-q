@@ -17,7 +17,6 @@ const useStyles = createStyles((theme) => ({
     position: "fixed",
     top: 0,
     left: 0,
-    zIndex: 999,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
     borderBottom: `1px solid ${

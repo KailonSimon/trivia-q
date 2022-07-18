@@ -16,7 +16,6 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
     }`,
     padding: "1rem",
-    zIndex: 998,
     position: "relative",
     bottom: 0,
   },

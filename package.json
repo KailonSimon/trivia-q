@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
-    "@mantine/hooks": "^4.2.11",
+    "@mantine/hooks": "^4.2.12",
+    "@mantine/modals": "^4.2.12",
     "@mantine/next": "^4.2.11",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^4.0.0",

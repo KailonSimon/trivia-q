@@ -13,6 +13,7 @@ import { store } from "../services/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { theme } from "../theme";
+import { ModalsProvider } from "@mantine/modals";
 
 function MyApp({ Component, pageProps }: AppProps) {
   let persistor = persistStore(store);
@@ -38,9 +39,11 @@ function MyApp({ Component, pageProps }: AppProps) {
               withNormalizeCSS
               withGlobalStyles
             >
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              <ModalsProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ModalsProvider>
             </MantineProvider>
           </ColorSchemeProvider>
         </PersistGate>

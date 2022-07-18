@@ -6,6 +6,7 @@ import { Center, createStyles, Text } from "@mantine/core";
 import Game from "../components/Game";
 import { startGame } from "../services/redux/gameSlice";
 import Link from "next/link";
+import { useGetNumberOfQuestionsQuery } from "../services/questions";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -57,6 +58,14 @@ export default function Home() {
   const { inGame } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
+  const { data, error, isLoading, isFetching, refetch } =
+    useGetNumberOfQuestionsQuery(10, {});
+
+  const handleStartGame = () => {
+    refetch();
+    dispatch(startGame());
+  };
+
   if (status === "loading") {
     return <LoadingScreen />;
   }
@@ -68,37 +77,40 @@ export default function Home() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Center className={classes.container}>
-        {inGame ? (
-          <Game />
-        ) : (
-          <div className={classes.options}>
-            <button
-              className={classes.button}
-              onClick={() => dispatch(startGame())}
-            >
-              Start quiz
-            </button>
-            {session ? (
-              <>
-                <button className={classes.button} onClick={() => signOut()}>
-                  Sign out
-                </button>
-                <Text className={classes.signedInText}>
-                  Currently signed in as{" "}
-                  <span style={{ fontWeight: 700 }}>{session.user.email}</span>
-                </Text>
-              </>
-            ) : (
-              <Link href="/api/auth/signin">
-                <button className={classes.button}>
-                  Sign in to save progress
-                </button>
-              </Link>
-            )}
-          </div>
-        )}
-      </Center>
+      {isLoading || isFetching ? (
+        <LoadingScreen />
+      ) : (
+        <Center className={classes.container}>
+          {inGame ? (
+            <Game questions={data.results} />
+          ) : (
+            <div className={classes.options}>
+              <button className={classes.button} onClick={handleStartGame}>
+                Start quiz
+              </button>
+              {session ? (
+                <>
+                  <button className={classes.button} onClick={() => signOut()}>
+                    Sign out
+                  </button>
+                  <Text className={classes.signedInText}>
+                    Currently signed in as{" "}
+                    <span style={{ fontWeight: 700 }}>
+                      {session.user.email}
+                    </span>
+                  </Text>
+                </>
+              ) : (
+                <Link href="/api/auth/signin">
+                  <button className={classes.button}>
+                    Sign in to save progress
+                  </button>
+                </Link>
+              )}
+            </div>
+          )}
+        </Center>
+      )}
     </>
   );
 }

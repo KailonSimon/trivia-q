@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, DoorExit, LetterX } from "tabler-icons-react";
+import { ArrowRight, Check, X } from "tabler-icons-react";
 import Question from "./Question";
 import { useSession } from "next-auth/react";
 import { ActionIcon, createStyles, Progress, Text } from "@mantine/core";
@@ -13,7 +12,7 @@ import {
   advanceQuestion,
   endGame,
 } from "../services/redux/gameSlice";
-import LoadingScreen from "./LoadingScreen";
+import { useModals } from "@mantine/modals";
 
 const useStyles = createStyles((theme) => ({
   content: {
@@ -93,32 +92,43 @@ const useStyles = createStyles((theme) => ({
       },
     },
   },
-  exitButtonContainer: {
-    width: "100%",
-    maxWidth: 600,
-    paddingTop: "1rem",
+  modal: {
+    borderRadius: 16,
+    background:
+      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
+    border: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
+    }`,
   },
 }));
 
-export default function Game({ numberOfQuestions = 10 }) {
+export default function Game({ questions }) {
   const { classes } = useStyles();
+  const modals = useModals();
   const { score, selectedAnswer, currentQuestion } = useAppSelector(
     (state) => state.game
   );
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
-  const { data, error, isLoading, refetch } = useGetNumberOfQuestionsQuery(
-    10,
-    {}
-  );
+  const openConfirmModal = () =>
+    modals.openConfirmModal({
+      title: "Exit Quiz?",
+      centered: true,
+      children: <Text size="sm">Your progress will be lost.</Text>,
+      labels: { confirm: "Exit", cancel: "Cancel" },
+      classNames: { modal: classes.modal },
+      confirmProps: { color: "red" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => dispatch(endGame()),
+    });
 
   const selectAnswer = (answer: string) => {
     dispatch(setAnswer(answer));
 
     try {
       const body = {
-        question: data.results[currentQuestion],
+        question: questions[currentQuestion],
         answer,
         ...(session && { uid: session.user.id }),
       };
@@ -131,7 +141,7 @@ export default function Game({ numberOfQuestions = 10 }) {
       console.error(error);
     }
 
-    if (answer === data.results[currentQuestion].correct_answer) {
+    if (answer === questions[currentQuestion].correct_answer) {
       dispatch(incrementScore());
     } else {
       return;
@@ -139,7 +149,7 @@ export default function Game({ numberOfQuestions = 10 }) {
   };
 
   const nextQuestion = () => {
-    if (currentQuestion < numberOfQuestions - 1) {
+    if (currentQuestion < questions.length - 1) {
       dispatch(resetAnswer());
       dispatch(advanceQuestion());
     }
@@ -147,92 +157,111 @@ export default function Game({ numberOfQuestions = 10 }) {
 
   const endQuiz = () => {
     dispatch(endGame());
-    refetch();
   };
 
   return (
     <>
-      {error ? (
-        <Text>An error has occurred.</Text>
-      ) : (
-        <div className={classes.content}>
-          <div className={classes.scoreboard}>
-            <div>
-              <Text weight="bold">
-                Score: {score ? score : "-"} /{" "}
-                {selectedAnswer ? currentQuestion + 1 : currentQuestion}
-              </Text>
-              <Text weight="bold">
-                Question: {currentQuestion + 1}/{numberOfQuestions}
-              </Text>
-            </div>
+      <div className={classes.content}>
+        <div className={classes.scoreboard}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: 8,
+            }}
+          >
+            <ActionIcon
+              size="md"
+              color="red"
+              variant="outline"
+              onClick={openConfirmModal}
+            >
+              <X />
+            </ActionIcon>
+            <Text weight="bold">
+              Question: {currentQuestion + 1}/{questions.length}
+            </Text>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
             <div
               className={`${classes.difficultyBadge}`}
               style={{
                 background:
-                  data.results[currentQuestion].difficulty === "easy"
+                  questions[currentQuestion].difficulty === "easy"
                     ? "green"
-                    : data.results[currentQuestion].difficulty === "medium"
+                    : questions[currentQuestion].difficulty === "medium"
                     ? "orange"
                     : "red",
               }}
             >
               <Text weight="bold">
-                {data.results[currentQuestion].difficulty.toUpperCase()}
+                {questions[currentQuestion].difficulty.toUpperCase()}
               </Text>
             </div>
-            <Progress
-              styles={{
-                root: { position: "absolute", bottom: 0, width: "100%" },
-              }}
-              sections={[
-                { value: (score / numberOfQuestions) * 100, color: "green" },
-                { value: (currentQuestion - score) * 10, color: "red" },
-              ]}
-              animate={!!selectedAnswer}
-            />
+            <Text weight="bold">
+              Score: {score ? score : "-"} /{" "}
+              {selectedAnswer ? currentQuestion + 1 : currentQuestion}
+            </Text>
           </div>
-
-          <AnimatePresence>
-            <Question
-              data={data.results[currentQuestion]}
-              selectAnswer={selectAnswer}
-              selectedAnswer={selectedAnswer}
-            />
-          </AnimatePresence>
-
-          <div className={classes.nextButtonContainer}>
-            <AnimatePresence>
-              {selectedAnswer && (
-                <motion.button
-                  className={classes.nextButton}
-                  onClick={
-                    currentQuestion + 1 === numberOfQuestions
-                      ? endQuiz
-                      : nextQuestion
-                  }
-                  initial={{ x: -100, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 100, opacity: 0 }}
-                  disabled={!selectedAnswer}
-                >
-                  {currentQuestion + 1 === numberOfQuestions ? (
-                    <>
-                      <span>Finish</span>
-                      <Check size={24} strokeWidth={3} />
-                    </>
-                  ) : (
-                    <>
-                      <span>Next Question</span>
-                      <ArrowRight size={24} strokeWidth={3} />
-                    </>
-                  )}
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </div>
+          <Progress
+            styles={{
+              root: { position: "absolute", bottom: 0, width: "100%" },
+            }}
+            sections={[
+              { value: (score / questions.length) * 100, color: "green" },
+              { value: (currentQuestion - score) * 10, color: "red" },
+            ]}
+            animate={!!selectedAnswer}
+          />
         </div>
-      )}
+
+        <AnimatePresence>
+          <Question
+            data={questions[currentQuestion]}
+            selectAnswer={selectAnswer}
+            selectedAnswer={selectedAnswer}
+          />
+        </AnimatePresence>
+
+        <div className={classes.nextButtonContainer}>
+          <AnimatePresence>
+            {selectedAnswer && (
+              <motion.button
+                className={classes.nextButton}
+                onClick={
+                  currentQuestion + 1 === questions.length
+                    ? endQuiz
+                    : nextQuestion
+                }
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 100, opacity: 0 }}
+                disabled={!selectedAnswer}
+              >
+                {currentQuestion + 1 === questions.length ? (
+                  <>
+                    <span>Finish</span>
+                    <Check size={24} strokeWidth={3} />
+                  </>
+                ) : (
+                  <>
+                    <span>Next Question</span>
+                    <ArrowRight size={24} strokeWidth={3} />
+                  </>
+                )}
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </>
   );
 }
