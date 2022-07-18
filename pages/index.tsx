@@ -11,9 +11,11 @@ const useStyles = createStyles((theme) => ({
   container: {
     height: "100%",
     display: "flex",
+    minHeight: "calc(100vh - 200px)",
   },
   options: {
     display: "flex",
+    justifyContent: "center",
     flexDirection: "column",
     gap: theme.spacing.md,
     width: "100%",
