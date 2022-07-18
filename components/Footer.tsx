@@ -18,6 +18,7 @@ const useStyles = createStyles((theme) => ({
     padding: "1rem",
     zIndex: 998,
     position: "relative",
+    bottom: 0,
   },
 }));
 

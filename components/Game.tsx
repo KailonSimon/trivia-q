@@ -152,17 +152,10 @@ export default function Game({ numberOfQuestions = 10 }) {
 
   return (
     <>
-      {isLoading ? (
-        <LoadingScreen />
-      ) : error ? (
+      {error ? (
         <Text>An error has occurred.</Text>
       ) : (
         <div className={classes.content}>
-          {/*<div className={classes.exitButtonContainer}>
-            <ActionIcon variant="outline" color="red" size="lg">
-              <LetterX size={20} />
-            </ActionIcon>
-      </div>*/}
           <div className={classes.scoreboard}>
             <div>
               <Text weight="bold">
