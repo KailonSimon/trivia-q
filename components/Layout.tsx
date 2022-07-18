@@ -4,7 +4,6 @@ import Navbar from "./Navigation/Navbar";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    minHeight: "calc(100vh - 160px)",
     height: "fit-content",
     background:
       theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,

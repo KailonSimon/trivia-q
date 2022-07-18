@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check } from "tabler-icons-react";
+import { ArrowRight, Check, DoorExit, LetterX } from "tabler-icons-react";
 import Question from "./Question";
 import { useSession } from "next-auth/react";
-import { createStyles, Progress, Text } from "@mantine/core";
+import { ActionIcon, createStyles, Progress, Text } from "@mantine/core";
 import { useGetNumberOfQuestionsQuery } from "../services/questions";
 import { useAppDispatch, useAppSelector } from "../services/hooks";
 import {
@@ -11,7 +11,6 @@ import {
   resetAnswer,
   setAnswer,
   advanceQuestion,
-  resetGame,
   endGame,
 } from "../services/redux/gameSlice";
 import LoadingScreen from "./LoadingScreen";
@@ -84,13 +83,20 @@ const useStyles = createStyles((theme) => ({
     transition: "all 500ms",
     overflow: "hidden",
     zIndex: 1,
-    "&:hover": {
-      background:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2],
-      cursor: "pointer",
+    [theme.fn.largerThan("md")]: {
+      "&:hover": {
+        background:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[4]
+            : theme.colors.gray[2],
+        cursor: "pointer",
+      },
     },
+  },
+  exitButtonContainer: {
+    width: "100%",
+    maxWidth: 600,
+    paddingTop: "1rem",
   },
 }));
 
@@ -100,8 +106,7 @@ export default function Game({ numberOfQuestions = 10 }) {
     (state) => state.game
   );
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const { data, error, isLoading, refetch } = useGetNumberOfQuestionsQuery(
     10,
@@ -153,6 +158,11 @@ export default function Game({ numberOfQuestions = 10 }) {
         <Text>An error has occurred.</Text>
       ) : (
         <div className={classes.content}>
+          {/*<div className={classes.exitButtonContainer}>
+            <ActionIcon variant="outline" color="red" size="lg">
+              <LetterX size={20} />
+            </ActionIcon>
+      </div>*/}
           <div className={classes.scoreboard}>
             <div>
               <Text weight="bold">

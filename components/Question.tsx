@@ -62,12 +62,14 @@ const useStyles = createStyles((theme) => ({
     transition: "all 500ms",
     overflow: "hidden",
     zIndex: 1,
-    "&:hover": {
-      background:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2],
-      cursor: "pointer",
+    [theme.fn.largerThan("md")]: {
+      "&:hover": {
+        background:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[4]
+            : theme.colors.gray[2],
+        cursor: "pointer",
+      },
     },
   },
   correctAnswerButton: {

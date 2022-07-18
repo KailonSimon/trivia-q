@@ -13,7 +13,7 @@ const useStyles = createStyles((theme) => ({
     gap: 4,
     [theme.fn.smallerThan("md")]: {
       marginTop: 0,
-      padding: "1rem 0",
+      paddingTop: "1rem",
     },
   },
 }));

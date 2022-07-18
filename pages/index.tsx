@@ -10,9 +10,7 @@ import Link from "next/link";
 const useStyles = createStyles((theme) => ({
   container: {
     height: "100%",
-    minHeight: "calc(100vh - 160px)",
     display: "flex",
-    alignItems: "center",
   },
   options: {
     display: "flex",
