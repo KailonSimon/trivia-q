@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "center",
     fontSize: "5vh",
     width: "100%",
-    height: "100%",
+    height: "80%",
   },
   logo: {
     fontSize: "1.25rem",
@@ -73,6 +73,8 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.largerThan("md")]: {
       display: "none",
     },
+    height: "calc(100vh - 4rem)",
+    marginTop: "4rem",
   },
 }));
 
