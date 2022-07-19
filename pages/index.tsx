@@ -64,7 +64,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
 
   const { data, error, isLoading, isFetching, refetch } =
-    useGetNumberOfQuestionsQuery(2, {});
+    useGetNumberOfQuestionsQuery(10, {});
 
   useEffect(() => {
     console.log(gameCondition);

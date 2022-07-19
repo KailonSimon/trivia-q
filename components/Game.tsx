@@ -128,7 +128,7 @@ export default function Game({ questions, isLoading, isFetching }) {
   const selectAnswer = (answer: string) => {
     dispatch(setAnswer(answer));
 
-    /*try {
+    try {
       const body = {
         question: questions[currentQuestion],
         answer,
@@ -141,7 +141,7 @@ export default function Game({ questions, isLoading, isFetching }) {
       });
     } catch (error) {
       console.error(error);
-    }*/
+    }
 
     if (answer === questions[currentQuestion].correct_answer) {
       dispatch(incrementScore());

@@ -37,6 +37,8 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
     }`,
     letterSpacing: 1,
+    fontSize: 26,
+    fontFamily: "Righteous, sans-serif",
   },
   options: {
     display: "flex",
@@ -88,9 +90,14 @@ function GameStart() {
       exit={{ x: -50, opacity: 0 }}
     >
       <div className={classes.container}>
-        <Title order={2} className={classes.title}>
+        <Text
+          order={1}
+          color="green"
+          className={classes.title}
+          component={Title}
+        >
           TriviaQ
-        </Title>
+        </Text>
         <div className={classes.options}>
           <button
             className={classes.button}
