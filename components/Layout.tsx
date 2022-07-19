@@ -8,6 +8,8 @@ const useStyles = createStyles((theme) => ({
     background:
       theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
     marginTop: 64,
+    maxWidth: "100vw",
+    overflow: "hidden",
   },
 }));
 

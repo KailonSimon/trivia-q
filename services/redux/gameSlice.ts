@@ -5,14 +5,14 @@ export interface GameState {
   score: number;
   selectedAnswer?: string;
   currentQuestion: number;
-  inGame: boolean;
+  gameCondition: number;
 }
 
 const initialState: GameState = {
   score: 0,
   selectedAnswer: null,
   currentQuestion: 0,
-  inGame: false,
+  gameCondition: 0,
 };
 
 export const gameSlice = createSlice({
@@ -31,16 +31,20 @@ export const gameSlice = createSlice({
     advanceQuestion: (state) => {
       state.currentQuestion += 1;
     },
-    resetGame: (state) => {
+    startGame: (state) => {
+      state.gameCondition = 1;
+    },
+    restartGame: (state) => {
+      state.gameCondition = 1;
       state.selectedAnswer = null;
       state.score = 0;
       state.currentQuestion = 0;
     },
-    startGame: (state) => {
-      state.inGame = true;
-    },
     endGame: (state) => {
-      state.inGame = false;
+      state.gameCondition = 2;
+    },
+    exitGame: (state) => {
+      state.gameCondition = 0;
       state.selectedAnswer = null;
       state.score = 0;
       state.currentQuestion = 0;
@@ -53,9 +57,10 @@ export const {
   setAnswer,
   resetAnswer,
   advanceQuestion,
-  resetGame,
   startGame,
+  restartGame,
   endGame,
+  exitGame,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

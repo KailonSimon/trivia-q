@@ -7,6 +7,10 @@ import Game from "../components/Game";
 import { startGame } from "../services/redux/gameSlice";
 import Link from "next/link";
 import { useGetNumberOfQuestionsQuery } from "../services/questions";
+import GameOver from "../components/GameOver";
+import GameStart from "../components/GameStart";
+import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -54,63 +58,62 @@ const useStyles = createStyles((theme) => ({
 
 export default function Home() {
   const { classes } = useStyles();
-  const { data: session, status } = useSession();
-  const { inGame } = useAppSelector((state) => state.game);
+  const { gameCondition, currentQuestion } = useAppSelector(
+    (state) => state.game
+  );
   const dispatch = useAppDispatch();
 
   const { data, error, isLoading, isFetching, refetch } =
-    useGetNumberOfQuestionsQuery(10, {});
+    useGetNumberOfQuestionsQuery(2, {});
 
-  const handleStartGame = () => {
-    refetch();
-    dispatch(startGame());
-  };
+  useEffect(() => {
+    console.log(gameCondition);
+  }, [gameCondition]);
 
-  if (status === "loading") {
+  if (isLoading || isFetching) {
     return <LoadingScreen />;
   }
+
+  const headTitle = () => {
+    switch (gameCondition) {
+      case 0:
+        return "Home";
+      case 1:
+        return `Question ${currentQuestion + 1}`;
+      case 2:
+        return "Game Over";
+    }
+  };
 
   return (
     <>
       <Head>
-        <title>TriviaQ | Home</title>
+        <title>{`TriviaQ | ${headTitle()}`}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      {isLoading || isFetching ? (
-        <LoadingScreen />
-      ) : (
-        <Center className={classes.container}>
-          {inGame ? (
-            <Game questions={data.results} />
-          ) : (
-            <div className={classes.options}>
-              <button className={classes.button} onClick={handleStartGame}>
-                Start quiz
-              </button>
-              {session ? (
-                <>
-                  <button className={classes.button} onClick={() => signOut()}>
-                    Sign out
-                  </button>
-                  <Text className={classes.signedInText}>
-                    Currently signed in as{" "}
-                    <span style={{ fontWeight: 700 }}>
-                      {session.user.email}
-                    </span>
-                  </Text>
-                </>
-              ) : (
-                <Link href="/api/auth/signin">
-                  <button className={classes.button}>
-                    Sign in to save progress
-                  </button>
-                </Link>
-              )}
-            </div>
-          )}
-        </Center>
-      )}
+      <Center className={classes.container}>
+        <AnimatePresence>
+          {(() => {
+            switch (gameCondition) {
+              case 0:
+                return <GameStart />;
+              case 1:
+                return (
+                  <Game
+                    isLoading={isLoading}
+                    isFetching={isFetching}
+                    questions={data.results}
+                  />
+                );
+              case 2:
+                return <GameOver refetch={refetch} />;
+              default:
+                return null;
+            }
+          })()}
+        </AnimatePresence>
+      </Center>
     </>
   );
 }

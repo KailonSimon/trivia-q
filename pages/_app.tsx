@@ -16,7 +16,7 @@ import { theme } from "../theme";
 import { ModalsProvider } from "@mantine/modals";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  let persistor = persistStore(store);
+  //let persistor = persistStore(store);
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
     defaultValue: "light",
@@ -29,24 +29,24 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
+        {/*<PersistGate loading={null} persistor={persistor}>*/}
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
+        >
+          <MantineProvider
+            theme={{ colorScheme, ...theme }}
+            withNormalizeCSS
+            withGlobalStyles
           >
-            <MantineProvider
-              theme={{ colorScheme, ...theme }}
-              withNormalizeCSS
-              withGlobalStyles
-            >
-              <ModalsProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </ModalsProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
-        </PersistGate>
+            <ModalsProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ModalsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+        {/*</PersistGate>*/}
       </Provider>
     </SessionProvider>
   );
