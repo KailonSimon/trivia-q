@@ -22,6 +22,7 @@ const useStyles = createStyles((theme) => ({
     borderBottom: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
     }`,
+    zIndex: 2,
   },
   nav: {
     height: "4rem",
@@ -73,8 +74,8 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.largerThan("md")]: {
       display: "none",
     },
-    height: "calc(100vh - 4rem)",
-    marginTop: "4rem",
+    height: "calc(100vh - 4rem - 1px)",
+    marginTop: "calc(4rem + 1px)",
   },
 }));
 
