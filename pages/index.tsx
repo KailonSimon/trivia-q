@@ -97,7 +97,7 @@ export default function Home() {
           {(() => {
             switch (gameCondition) {
               case 0:
-                return <GameStart />;
+                return <GameStart refetch={refetch} />;
               case 1:
                 return (
                   <Game

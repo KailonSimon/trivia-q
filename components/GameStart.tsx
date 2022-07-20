@@ -77,10 +77,15 @@ const useStyles = createStyles((theme) => ({
     textAlign: "center",
   },
 }));
-function GameStart() {
+function GameStart({ refetch }) {
   const { classes } = useStyles();
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
+
+  const handleStartGame = () => {
+    refetch();
+    dispatch(startGame());
+  };
 
   return (
     <motion.div
@@ -99,10 +104,7 @@ function GameStart() {
           TriviaQ
         </Text>
         <div className={classes.options}>
-          <button
-            className={classes.button}
-            onClick={() => dispatch(startGame())}
-          >
+          <button className={classes.button} onClick={handleStartGame}>
             Start Quiz
           </button>
           {session ? (
