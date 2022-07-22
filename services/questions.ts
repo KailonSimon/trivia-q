@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Question } from "../types/question";
+import { Question } from "../types/types";
 
 type QuestionsResponse = {
   response_code: number;

@@ -6,3 +6,9 @@ export type Question = {
   correct_answer: string;
   incorrect_answers: string[];
 };
+
+export type AnswerRequestBody = {
+  question: Question;
+  answer: string;
+  uid?: string;
+};

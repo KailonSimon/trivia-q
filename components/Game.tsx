@@ -13,6 +13,7 @@ import {
 } from "../services/redux/gameSlice";
 import { useModals } from "@mantine/modals";
 import LoadingScreen from "./LoadingScreen";
+import { sendAnswerRequest } from "../lib/utils";
 
 const useStyles = createStyles((theme) => ({
   content: {
@@ -134,11 +135,7 @@ export default function Game({ questions, isLoading, isFetching }) {
         answer,
         ...(session && { uid: session.user.id }),
       };
-      fetch("/api/answers", {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      sendAnswerRequest(body);
     } catch (error) {
       console.error(error);
     }

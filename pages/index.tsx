@@ -61,7 +61,6 @@ export default function Home() {
   const { gameCondition, currentQuestion } = useAppSelector(
     (state) => state.game
   );
-  const dispatch = useAppDispatch();
 
   const { data, error, isLoading, isFetching, refetch } =
     useGetNumberOfQuestionsQuery(10, {});
