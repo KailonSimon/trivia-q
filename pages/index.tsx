@@ -1,12 +1,9 @@
 import Head from "next/head";
-import { signOut, useSession } from "next-auth/react";
-import { useAppDispatch, useAppSelector } from "../services/hooks";
-import LoadingScreen from "../components/LoadingScreen";
-import { Center, createStyles, Text } from "@mantine/core";
-import Game from "../components/Game";
-import { startGame } from "../services/redux/gameSlice";
-import Link from "next/link";
+import { Center, createStyles } from "@mantine/core";
+import { useAppSelector } from "../services/hooks";
 import { useGetNumberOfQuestionsQuery } from "../services/questions";
+import LoadingScreen from "../components/LoadingScreen";
+import Game from "../components/Game";
 import GameOver from "../components/GameOver";
 import GameStart from "../components/GameStart";
 import { useEffect } from "react";

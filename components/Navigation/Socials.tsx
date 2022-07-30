@@ -11,6 +11,7 @@ const useStyles = createStyles((theme) => ({
     width: "fit-content",
     marginTop: 8,
     gap: 4,
+    color: theme.colors.green[7],
     [theme.fn.smallerThan("md")]: {
       marginTop: 0,
       paddingTop: "1rem",

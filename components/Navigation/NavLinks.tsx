@@ -6,6 +6,7 @@ const useStyles = createStyles((theme) => ({
   navList: {
     display: "flex",
     gap: "3rem",
+    color: theme.colors.green[7],
     [theme.fn.smallerThan("md")]: {
       flexDirection: "column",
       alignItems: "center",

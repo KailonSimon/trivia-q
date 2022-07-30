@@ -1,8 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
 import { createStyles } from "@mantine/core";
 import MetricsCard from "./MetricsCard";
 import useEmblaCarousel from "embla-carousel-react";
-import { Bolt, Book2, Checks, Icon } from "tabler-icons-react";
 import { Metric } from "../../pages/stats";
 
 const useStyles = createStyles((theme) => ({
@@ -16,28 +14,10 @@ const useStyles = createStyles((theme) => ({
     filter: theme.colorScheme === "dark" ? "" : "drop-shadow(0 4px 4px gray)",
   },
   title: {
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    color: theme.colorScheme === "dark" ? theme.colors.green[7] : theme.black,
     marginBottom: "1rem",
   },
 }));
-
-/*const metrics = [
-  {
-    description: "Stat 1",
-    value: 1,
-    icon: <Bolt strokeWidth={2} />,
-  },
-  {
-    description: "Stat 2",
-    value: 133,
-    icon: <Checks strokeWidth={2} />,
-  },
-  {
-    description: "Stat 3",
-    value: 134,
-    icon: <Book2 strokeWidth={2} />,
-  },
-];*/
 
 type Props = {
   title: string;

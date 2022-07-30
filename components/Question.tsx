@@ -28,6 +28,7 @@ const useStyles = createStyles((theme) => ({
     }`,
     letterSpacing: 1,
     fontFamily: "Righteous",
+    color: theme.colorScheme === "dark" ? theme.colors.green[7] : theme.black,
   },
   questionText: {
     marginBottom: "2rem",
@@ -52,7 +53,7 @@ const useStyles = createStyles((theme) => ({
     padding: "15px 25px",
     borderRadius: 32,
     background:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]

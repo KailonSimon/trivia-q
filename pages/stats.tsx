@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { createStyles, Title, Text } from "@mantine/core";
 import Metrics from "../components/Stats/Metrics";
 import { Bolt, Checks } from "tabler-icons-react";
+import Head from "next/head";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -14,6 +15,7 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     padding: "1rem",
+    color: theme.colors.green[7],
   },
   chartWrapper: {
     display: "flex",
@@ -64,26 +66,33 @@ export default function Stats({ data }) {
   }
 
   return (
-    <div className={classes.container}>
-      <Title order={1} mb={8}>
-        Stats
-      </Title>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-        }}
-      >
-        {data.length && (
-          <Metrics title="Total Metrics" metrics={getMetrics(data)} />
-        )}
-        {userData && userData.length && (
-          <Metrics title="Your Metrics" metrics={getMetrics(userData)} />
-        )}
+    <>
+      <Head>
+        <title>Trivia Q | Stats</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
+      <div className={classes.container}>
+        <Title order={1} mb={8}>
+          Stats
+        </Title>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+          }}
+        >
+          {data.length && (
+            <Metrics title="Total Metrics" metrics={getMetrics(data)} />
+          )}
+          {userData && userData.length && (
+            <Metrics title="Your Metrics" metrics={getMetrics(userData)} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

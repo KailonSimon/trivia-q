@@ -39,6 +39,7 @@ const useStyles = createStyles((theme) => ({
     letterSpacing: 1,
     fontSize: 26,
     fontFamily: "Righteous, sans-serif",
+    color: theme.colors.green[7],
   },
   options: {
     display: "flex",
@@ -55,7 +56,7 @@ const useStyles = createStyles((theme) => ({
     padding: "15px 25px",
     borderRadius: 32,
     background:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]
@@ -76,6 +77,10 @@ const useStyles = createStyles((theme) => ({
   signedInText: {
     textAlign: "center",
   },
+  userEmail: {
+    fontWeight: 700,
+    color: theme.colorScheme === "dark" ? theme.colors.green[7] : theme.black,
+  },
 }));
 function GameStart({ refetch }) {
   const { classes } = useStyles();
@@ -95,12 +100,7 @@ function GameStart({ refetch }) {
       exit={{ x: -50, opacity: 0 }}
     >
       <div className={classes.container}>
-        <Text
-          order={1}
-          color="green"
-          className={classes.title}
-          component={Title}
-        >
+        <Text order={1} className={classes.title} component={Title}>
           TriviaQ
         </Text>
         <div className={classes.options}>
@@ -114,7 +114,7 @@ function GameStart({ refetch }) {
               </button>
               <Text className={classes.signedInText}>
                 Currently signed in as{" "}
-                <span style={{ fontWeight: 700 }}>{session.user.email}</span>
+                <span className={classes.userEmail}>{session.user.email}</span>
               </Text>
             </>
           ) : (
