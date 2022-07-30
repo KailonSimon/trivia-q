@@ -14,8 +14,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { theme } from "../theme";
 import { ModalsProvider } from "@mantine/modals";
+import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  usePageViews();
   let persistor = persistStore(store);
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
@@ -27,28 +29,33 @@ function MyApp({ Component, pageProps }: AppProps) {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-          >
-            <MantineProvider
-              theme={{ colorScheme, ...theme }}
-              withNormalizeCSS
-              withGlobalStyles
+    <>
+      <GoogleAnalytics
+        gaMeasurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
+      />
+      <SessionProvider session={pageProps.session}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ColorSchemeProvider
+              colorScheme={colorScheme}
+              toggleColorScheme={toggleColorScheme}
             >
-              <ModalsProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </ModalsProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
-        </PersistGate>
-      </Provider>
-    </SessionProvider>
+              <MantineProvider
+                theme={{ colorScheme, ...theme }}
+                withNormalizeCSS
+                withGlobalStyles
+              >
+                <ModalsProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ModalsProvider>
+              </MantineProvider>
+            </ColorSchemeProvider>
+          </PersistGate>
+        </Provider>
+      </SessionProvider>
+    </>
   );
 }
 
