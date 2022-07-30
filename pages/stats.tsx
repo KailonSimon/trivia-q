@@ -79,7 +79,7 @@ export default function Stats({ data }) {
         {data.length && (
           <Metrics title="Total Metrics" metrics={getMetrics(data)} />
         )}
-        {userData.length && (
+        {userData && userData.length && (
           <Metrics title="Your Metrics" metrics={getMetrics(userData)} />
         )}
       </div>
