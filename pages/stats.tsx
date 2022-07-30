@@ -1,19 +1,10 @@
-import { unstable_getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSideProps } from "next";
 import prisma from "../lib/prisma";
 import { Question } from "@prisma/client";
-import {
-  Pie,
-  PieChart,
-  Legend,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
-import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { createStyles, Title, Text } from "@mantine/core";
+import Metrics from "../components/Stats/Metrics";
+import { Bolt, Checks } from "tabler-icons-react";
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -22,7 +13,7 @@ const useStyles = createStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "1rem 0",
+    padding: "1rem",
   },
   chartWrapper: {
     display: "flex",
@@ -33,18 +24,31 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const colors = ["#008000", "#FF0000"];
-
 const getCorrectAnswers = (answers: Question[]) => {
   return answers.filter(
     (answer: Question) => answer.selectedAnswer === answer.correctAnswer
   );
 };
 
-const getIncorrectAnswers = (answers: Question[]) => {
-  return answers.filter(
-    (answer: Question) => answer.selectedAnswer !== answer.correctAnswer
-  );
+export type Metric = {
+  description: string;
+  value: number;
+  icon: JSX.Element;
+};
+
+const getMetrics = (data: Question[]): Metric[] => {
+  return [
+    {
+      description: "Questions Answered",
+      value: data.length,
+      icon: <Bolt strokeWidth={2} />,
+    },
+    {
+      description: "Correct Answers",
+      value: getCorrectAnswers(data).length,
+      icon: <Checks strokeWidth={2} />,
+    },
+  ];
 };
 
 export default function Stats({ data }) {
@@ -59,118 +63,31 @@ export default function Stats({ data }) {
     );
   }
 
-  useEffect(() => {
-    if (userData) {
-      console.log(userData);
-    }
-  }, [userData]);
-
   return (
     <div className={classes.container}>
       <Title order={1} mb={8}>
         Stats
       </Title>
-
       <div
         style={{
           width: "100%",
           display: "flex",
-          flexFlow: "row wrap",
-          justifyContent: "center",
+          flexDirection: "column",
+          gap: "1rem",
         }}
       >
-        {userData && (
-          <div className={classes.chartWrapper}>
-            <Text weight={700}>You</Text>
-            {userData.length ? (
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={[
-                      {
-                        name: "Correct",
-                        value: getCorrectAnswers(userData).length,
-                      },
-                      {
-                        name: "Incorrect",
-                        value: getIncorrectAnswers(userData).length,
-                      },
-                    ]}
-                    dataKey="value"
-                    nameKey="name"
-                    fill="red"
-                  >
-                    {data.map((item, index) => (
-                      <Cell key={`cell-${index}`} fill={colors[index]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: 8,
-                      backgroundColor: "#191919",
-                      border: "1px solid #cdbe78",
-                    }}
-                    itemStyle={{ color: "#f2f2f2" }}
-                    formatter={(value, name, props) =>
-                      `${((value / data.length) * 100).toFixed(2)}%`
-                    }
-                  />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : (
-              <Text style={{ marginTop: 4 }}>No user data.</Text>
-            )}
-          </div>
+        {data.length && (
+          <Metrics title="Total Metrics" metrics={getMetrics(data)} />
         )}
-
-        <div className={classes.chartWrapper}>
-          <Text weight={700}>Average</Text>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={[
-                  { name: "Correct", value: getCorrectAnswers(data).length },
-                  {
-                    name: "Incorrect",
-                    value: getIncorrectAnswers(data).length,
-                  },
-                ]}
-                dataKey="value"
-                nameKey="name"
-                fill="red"
-              >
-                {data.map((item, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  borderRadius: 8,
-                  backgroundColor: "#191919",
-                  border: "1px solid #cdbe78",
-                }}
-                itemStyle={{ color: "#f2f2f2" }}
-                formatter={(value, name, props) =>
-                  `${((value / data.length) * 100).toFixed(2)}%`
-                }
-              />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        {userData.length && (
+          <Metrics title="Your Metrics" metrics={getMetrics(userData)} />
+        )}
       </div>
     </div>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
-
   const data = await prisma.question.findMany({
     select: {
       id: true,

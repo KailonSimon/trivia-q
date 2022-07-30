@@ -1,14 +1,13 @@
 {
   "name": "trivia-q",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test": "jest"
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
@@ -19,6 +18,7 @@
     "@prisma/client": "^4.0.0",
     "@reduxjs/toolkit": "^1.8.3",
     "@types/he": "^1.1.2",
+    "embla-carousel-react": "^7.0.0-rc05",
     "framer-motion": "^6.3.16",
     "he": "^1.2.0",
     "lodash": "^4.17.21",
@@ -34,7 +34,10 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.6",
+    "@babel/core": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.3",
     "@types/react": "^18.0.15",
@@ -43,6 +46,8 @@
     "eslint-config-next": "12.1.6",
     "eslint-plugin-storybook": "^0.6.0",
     "file-loader": "^6.2.0",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
     "prisma": "^4.0.0",
     "typescript": "^4.7.4",
     "url-loader": "^4.1.1"

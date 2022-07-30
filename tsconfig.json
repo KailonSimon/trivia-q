@@ -15,6 +15,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "sum.js", "sum.test.js"],
   "exclude": ["node_modules"]
 }
