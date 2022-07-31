@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Question } from "../types/types";
+import { REHYDRATE } from "redux-persist";
 
 type QuestionsResponse = {
   response_code: number;
@@ -16,6 +17,11 @@ export const questionApi = createApi({
       providesTags: ["Questions"],
     }),
   }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === REHYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
 });
 
 export const { useGetNumberOfQuestionsQuery } = questionApi;

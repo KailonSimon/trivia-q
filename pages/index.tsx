@@ -6,7 +6,6 @@ import LoadingScreen from "../components/LoadingScreen";
 import Game from "../components/Game";
 import GameOver from "../components/GameOver";
 import GameStart from "../components/GameStart";
-import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
 const useStyles = createStyles((theme) => ({
@@ -61,10 +60,6 @@ export default function Home() {
 
   const { data, error, isLoading, isFetching, refetch } =
     useGetNumberOfQuestionsQuery(10, {});
-
-  useEffect(() => {
-    console.log(gameCondition);
-  }, [gameCondition]);
 
   if (isLoading || isFetching) {
     return <LoadingScreen />;
