@@ -12,21 +12,13 @@ import storage from "redux-persist/lib/storage";
 import { questionApi } from "../questions";
 import gameReducer from "../redux/gameSlice";
 
-const persistConfig = {
-  key: "root",
-  version: 1,
-  storage,
-};
-
 const rootReducer = combineReducers({
   game: gameReducer,
   [questionApi.reducerPath]: questionApi.reducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

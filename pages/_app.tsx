@@ -18,7 +18,6 @@ import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 
 function MyApp({ Component, pageProps }: AppProps) {
   usePageViews();
-  let persistor = persistStore(store);
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
     defaultValue: "light",
@@ -35,24 +34,22 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <SessionProvider session={pageProps.session}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <ColorSchemeProvider
-              colorScheme={colorScheme}
-              toggleColorScheme={toggleColorScheme}
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          >
+            <MantineProvider
+              theme={{ colorScheme, ...theme }}
+              withNormalizeCSS
+              withGlobalStyles
             >
-              <MantineProvider
-                theme={{ colorScheme, ...theme }}
-                withNormalizeCSS
-                withGlobalStyles
-              >
-                <ModalsProvider>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </ModalsProvider>
-              </MantineProvider>
-            </ColorSchemeProvider>
-          </PersistGate>
+              <ModalsProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ModalsProvider>
+            </MantineProvider>
+          </ColorSchemeProvider>
         </Provider>
       </SessionProvider>
     </>
