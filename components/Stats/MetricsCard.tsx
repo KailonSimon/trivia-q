@@ -14,6 +14,7 @@ const useStyles = createStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    fontWeight: 600,
   },
   header: {
     display: "flex",

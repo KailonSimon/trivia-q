@@ -6,16 +6,16 @@ import { Metric } from "../../pages/stats";
 const useStyles = createStyles((theme) => ({
   embla: {
     position: "relative",
-    padding: 20,
+    padding: 8,
     width: "100%",
     background:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
     borderRadius: 16,
-    filter: theme.colorScheme === "dark" ? "" : "drop-shadow(0 4px 4px gray)",
   },
   title: {
     color: theme.colorScheme === "dark" ? theme.colors.green[7] : theme.black,
-    marginBottom: "1rem",
+    marginBottom: "0.5rem",
+    textAlign: "center",
   },
 }));
 

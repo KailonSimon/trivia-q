@@ -81,7 +81,6 @@ export default function Stats({ data }) {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            gap: "1rem",
           }}
         >
           {data.length && (
