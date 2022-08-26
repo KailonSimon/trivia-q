@@ -39,6 +39,7 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan("md")]: {
       marginBottom: "1rem",
     },
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
   },
   answerContainer: {
     display: "flex",
@@ -54,23 +55,24 @@ const useStyles = createStyles((theme) => ({
     borderRadius: 32,
     background:
       theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.gray[3]
+        : theme.colors.gray[9],
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]
     }`,
     position: "relative",
-    fontWeight: 900,
-    transition: "all 500ms",
+    fontWeight: 700,
     overflow: "hidden",
     zIndex: 1,
     cursor: "pointer",
-    [theme.fn.largerThan("md")]: {
-      "&:hover": {
-        background:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2],
-      },
+    "&:hover": {
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+      background:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[4]
+          : theme.colors.gray[4],
     },
   },
   correctAnswerButton: {
@@ -78,17 +80,15 @@ const useStyles = createStyles((theme) => ({
     border: "none !important",
     color: "white !important",
     "&:hover": {
-      backgroundColor: "green !important",
       cursor: "initial !important",
     },
   },
   incorrectAnswerButton: {
-    backgroundColor: "red !important",
+    backgroundColor: "#E03131 !important",
     border: "none !important",
     color: "white !important",
 
     "&:hover": {
-      backgroundColor: "red !important",
       cursor: "initial !important",
     },
   },

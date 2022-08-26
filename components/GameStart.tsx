@@ -62,8 +62,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]
     }`,
     position: "relative",
-    fontWeight: 900,
-    transition: "all 500ms",
+    fontWeight: 700,
     overflow: "hidden",
     zIndex: 1,
     "&:hover": {

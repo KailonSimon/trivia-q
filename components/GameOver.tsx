@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]
     }`,
     position: "relative",
-    fontWeight: 900,
+    fontWeight: 700,
     transition: "all 500ms",
     overflow: "hidden",
     zIndex: 1,

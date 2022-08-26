@@ -59,7 +59,7 @@ const useStyles = createStyles((theme) => ({
     background: "orange",
   },
   badgeHard: {
-    background: "red",
+    background: "#E03131",
   },
   nextButtonContainer: {
     height: 90,
@@ -75,24 +75,21 @@ const useStyles = createStyles((theme) => ({
     padding: "15px 25px",
     borderRadius: 32,
     background:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[4]
     }`,
     position: "relative",
-    fontWeight: 900,
-    transition: "all 500ms",
+    fontWeight: 700,
     overflow: "hidden",
     zIndex: 1,
-    [theme.fn.largerThan("md")]: {
-      "&:hover": {
-        background:
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2],
-        cursor: "pointer",
-      },
+    "&:hover": {
+      background:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[4]
+          : theme.colors.gray[2],
+      cursor: "pointer",
     },
   },
   modal: {
@@ -206,7 +203,7 @@ export default function Game({ questions, isLoading, isFetching }) {
                   ? "green"
                   : questions[currentQuestion].difficulty === "medium"
                   ? "orange"
-                  : "red",
+                  : "#E03131",
             }}
           >
             <Text weight="bold">

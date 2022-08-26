@@ -124,6 +124,7 @@ export default function Navbar() {
             opened={opened}
             onClick={() => setOpened(!opened)}
             size="sm"
+            color="#37b24d"
           />
         </div>
       </nav>
