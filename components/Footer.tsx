@@ -9,15 +9,13 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "center",
     fontSize: "1rem",
     fontWeight: 700,
-    minHeight: 128,
+    minHeight: 96,
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[4]
     }`,
     padding: "1rem",
-    position: "relative",
-    bottom: 0,
   },
 }));
 

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Center, createStyles } from "@mantine/core";
+import { createStyles } from "@mantine/core";
 import { useAppSelector } from "../services/hooks";
 import { useGetNumberOfQuestionsQuery } from "../services/questions";
 import LoadingScreen from "../components/LoadingScreen";
@@ -12,7 +12,6 @@ const useStyles = createStyles((theme) => ({
   container: {
     height: "100%",
     display: "flex",
-    minHeight: "calc(100vh - 200px)",
   },
   options: {
     display: "flex",
@@ -83,7 +82,7 @@ export default function Home() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Center className={classes.container}>
+      <div className={classes.container}>
         <AnimatePresence>
           {(() => {
             switch (gameCondition) {
@@ -104,7 +103,7 @@ export default function Home() {
             }
           })()}
         </AnimatePresence>
-      </Center>
+      </div>
     </>
   );
 }

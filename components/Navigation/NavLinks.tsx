@@ -92,9 +92,20 @@ function NavLinks({ mobile, handleClick }) {
       {links.map((link) => {
         return (
           <li className={classes.navItem} key={link.text}>
-            <a href={link.href} onClick={handleClick}>
-              {link.text}
-            </a>
+            {link.text == "Contact" ? (
+              <a
+                href="https://www.kailon.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleClick}
+              >
+                {"Contact"}
+              </a>
+            ) : (
+              <a href={link.href} onClick={handleClick}>
+                {link.text}
+              </a>
+            )}
           </li>
         );
       })}

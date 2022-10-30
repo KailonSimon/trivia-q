@@ -4,10 +4,10 @@ import Navbar from "./Navigation/Navbar";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    height: "fit-content",
+    height: "calc(100vh - 160px)",
     background:
       theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
-    marginTop: 64,
+    marginTop: 65,
     maxWidth: "100vw",
     overflow: "hidden",
   },
