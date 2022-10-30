@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
     minHeight: "fit-content",
     maxWidth: "100vw",
     overflow: "hidden",
-    padding: "0 1rem",
+    padding: "1rem",
   },
   scoreboard: {
     position: "relative",
