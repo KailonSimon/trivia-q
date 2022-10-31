@@ -15,6 +15,7 @@ import { persistStore } from "redux-persist";
 import { theme } from "../theme";
 import { ModalsProvider } from "@mantine/modals";
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   usePageViews();
@@ -29,6 +30,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <meta
+          name="theme-color"
+          content={colorScheme === "dark" ? "#25262b" : "#fff"}
+        />
+      </Head>
       <GoogleAnalytics
         gaMeasurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
       />
