@@ -10,6 +10,10 @@ import { useState } from "react";
 import { MoonStars, Sun } from "tabler-icons-react";
 import NavLinks from "./NavLinks";
 import Socials from "./Socials";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { useSession } from "next-auth/react";
+import { getLevelFromXP, getLevelPercentage } from "../../lib/utils";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -32,6 +36,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "0 auto",
+    position: "relative",
   },
   drawerContent: {
     display: "flex",
@@ -84,6 +89,7 @@ export default function Navbar() {
   const [opened, setOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const { data: session } = useSession();
 
   return (
     <header className={classes.header}>
@@ -119,6 +125,28 @@ export default function Navbar() {
             {dark ? <Sun size={18} /> : <MoonStars size={18} />}
           </ActionIcon>
         </div>
+        {session && (
+          <div
+            style={{
+              position: "absolute",
+              right: 48,
+              height: "32px",
+              width: "32px",
+            }}
+          >
+            <CircularProgressbar
+              value={getLevelPercentage(session.user.XP)}
+              text={`${Math.floor(getLevelFromXP(session.user.XP))}`}
+              styles={buildStyles({
+                strokeLinecap: "butt",
+                pathColor: dark ? "#51cf66" : "37b24d",
+                trailColor: dark ? "#25262b" : "#fff",
+                textColor: dark ? "#51cf66" : "37b24d",
+                textSize: 36,
+              })}
+            />
+          </div>
+        )}
         <div className={classes.navToggle}>
           <Burger
             opened={opened}

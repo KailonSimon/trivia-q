@@ -102,6 +102,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+function getQuestionValue(difficulty: string) {
+  switch (difficulty) {
+    case "easy":
+      return 1;
+    case "medium":
+      return 2;
+    case "hard":
+      return 3;
+  }
+}
+
 export default function Game({ questions, isLoading, isFetching }) {
   const { classes } = useStyles();
   const modals = useModals();
@@ -130,7 +141,19 @@ export default function Game({ questions, isLoading, isFetching }) {
       const body = {
         question: questions[currentQuestion],
         answer,
-        ...(session && { uid: session.user.id }),
+        ...(session && {
+          uid: session.user.id,
+          updateData:
+            answer === questions[currentQuestion].correct_answer
+              ? {
+                  XP: {
+                    increment: getQuestionValue(
+                      questions[currentQuestion].difficulty
+                    ),
+                  },
+                }
+              : null,
+        }),
       };
       sendAnswerRequest(body);
     } catch (error) {

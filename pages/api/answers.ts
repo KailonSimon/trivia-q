@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
 import prisma from "../../lib/prisma";
+import { User } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +16,7 @@ export default async function handler(
       res.status(200).json({ answers });
       break;
     case "POST":
-      const { question, answer, uid } = req.body;
+      const { question, answer, uid, updateData } = req.body;
 
       if (session && session.user.id !== uid) {
         res.status(401).json({ error: "Mismatched credentials" });
@@ -39,7 +40,16 @@ export default async function handler(
             ...(uid && { userId: uid }),
           },
         });
-        res.status(201).json({ result });
+        let updateUser: User;
+        if (uid && updateData) {
+          updateUser = await prisma.user.update({
+            where: {
+              id: uid,
+            },
+            data: updateData,
+          });
+        }
+        res.status(201).json({ result, ...(updateUser && { ...updateUser }) });
       } catch (error) {
         console.log(error);
         res.status(404).json({ error: "Error occurred" });

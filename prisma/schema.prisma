@@ -9,16 +9,16 @@ datasource db {
 
 model Question {
   id               String   @id @default(cuid())
-  question         String
-  type             String
-  difficulty       String
-  category         String
   incorrectAnswers String[]
   correctAnswer    String
-  selectedAnswer   String
-  answeredAt       DateTime @default(now()) @map(name: "answered_at")
-  User             User?    @relation(fields: [userId], references: [id])
+  answeredAt       DateTime @default(now()) @map("answered_at")
+  category         String
+  difficulty       String
+  question         String
+  type             String
   userId           String?
+  selectedAnswer   String
+  User             User?    @relation(fields: [userId], references: [id])
 
   @@map("questions")
 }
@@ -38,8 +38,7 @@ model Account {
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -59,15 +58,16 @@ model User {
   id                String     @id @default(cuid())
   name              String?
   email             String?    @unique
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
   emailVerified     DateTime?  @map("email_verified")
   image             String?
-  createdAt         DateTime   @default(now()) @map(name: "created_at")
-  updatedAt         DateTime   @updatedAt @map(name: "updated_at")
   accounts          Account[]
-  sessions          Session[]
   questionsAnswered Question[]
+  sessions          Session[]
+  XP                Int        @default(0)
 
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {

@@ -15,6 +15,7 @@ export default async function handler(
       name: true,
       image: true,
       questionsAnswered: true,
+      XP: true,
     },
   });
 
