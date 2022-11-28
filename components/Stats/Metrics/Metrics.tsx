@@ -1,23 +1,7 @@
-import { createStyles } from "@mantine/core";
-import MetricsCard from "./MetricsCard";
+import MetricsCard from "../MetricsCard/MetricsCard";
 import useEmblaCarousel from "embla-carousel-react";
-import { Metric } from "../../pages/stats";
-
-const useStyles = createStyles((theme) => ({
-  embla: {
-    position: "relative",
-    padding: 8,
-    width: "100%",
-    background:
-      theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.white,
-    borderRadius: 16,
-  },
-  title: {
-    color: theme.colorScheme === "dark" ? theme.colors.green[7] : theme.black,
-    marginBottom: "0.5rem",
-    textAlign: "center",
-  },
-}));
+import { Metric } from "../../../pages/stats";
+import { useStyles } from "./styles";
 
 type Props = {
   title: string;

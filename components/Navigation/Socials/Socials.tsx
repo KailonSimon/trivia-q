@@ -1,23 +1,6 @@
 import { BrandGithub, BrandLinkedin } from "tabler-icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import { createStyles } from "@mantine/core";
-
-const useStyles = createStyles((theme) => ({
-  socials: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    height: "fit-content",
-    width: "fit-content",
-    marginTop: 8,
-    gap: 4,
-    color: theme.colors.green[5],
-    [theme.fn.smallerThan("md")]: {
-      marginTop: 0,
-      paddingTop: "1rem",
-    },
-  },
-}));
+import { useStyles } from "./styles";
 
 function Socials() {
   const { classes } = useStyles();

@@ -1,18 +1,12 @@
 import React from "react";
 import { Center } from "@mantine/core";
 import { motion } from "framer-motion";
+import { useStyles } from "./styles";
 
 function LoadingScreen() {
+  const { classes } = useStyles();
   return (
-    <Center
-      style={{
-        height: "calc(100vh - 160px)",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <Center className={classes.container}>
       <motion.svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
